@@ -2,7 +2,7 @@
 
 This project is a **Resume Checker** that allows users to upload their resumes and get instant feedback on their chances of getting hired. It uses Next.js for the frontend and backend, and integrates with the Google Generative AI API to analyze the resumes.
 
-![Resume Checker Screenshot](./screenshots/resume-checker.png)
+![Resume Checker Screenshot](./src/app/assests/ats.png)
 
 ## ✨ Features
 
@@ -97,6 +97,6 @@ Content-Type: multipart/form-data
 {
   "resume": "<your-file.pdf>"
 }
-
+```
 
 ### ❤️ HAPPY CODING ❤️
