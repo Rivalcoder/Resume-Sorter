@@ -7,7 +7,24 @@ export default function Home() {
   const [fileName, setFileName] = useState("");
   const [response, setResponse] = useState("");
   const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false); // New loading state
+  const [isLoading, setIsLoading] = useState(false);
+
+  const criteria = [
+    "ATS Parse Rate: Assess how well the resume adheres to ATS standards.",
+    "Quantifying Impact: Check if achievements are measurable with quantifiable results.",
+    "Repetition: Identify repeated phrases or overused terms.",
+    "Spelling & Grammar: Highlight any errors in spelling or grammar.",
+    "File Format & Size: Determine whether the resume is compatible with ATS systems.",
+    "Resume Length: Evaluate if the length is appropriate (e.g., 1-2 pages for most jobs).",
+    "Long Bullet Points: Check if bullet points are concise and action-oriented.",
+    "Contact Information: Verify the presence and accuracy of essential details (email, phone, LinkedIn).",
+    "Essential Sections: Confirm if standard sections like Skills, Experience, and Education are included.",
+    "Hard Skills: Evaluate the relevance of hard skills listed (e.g., technical proficiencies).",
+    "Soft Skills: Assess the clarity and relevance of soft skills included.",
+    "Active Voice: Check if bullet points use active voice instead of passive voice.",
+    "Buzzwords & Clichés: Identify overused buzzwords or vague terms and suggest replacements.",
+    "Design: Review the design for readability and ATS compatibility.",
+  ];
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
@@ -18,9 +35,9 @@ export default function Home() {
     }
 
     setFileName(file.name);
-    setError(""); // Clear any previous errors
-    setResponse(""); // Reset previous response
-    setIsLoading(true); // Set loading state to true
+    setError("");
+    setResponse("");
+    setIsLoading(true);
 
     const formData = new FormData();
     formData.append("resume", file);
@@ -36,29 +53,22 @@ export default function Home() {
       }
 
       const data = await res.json();
-      setResponse(data.message || "File uploaded successfully!");
+      setResponse(data.message);
     } catch (err) {
       console.error("Error:", err);
       setError("Failed to process your resume. Please try again.");
     } finally {
-      setIsLoading(false); // Set loading state to false
+      setIsLoading(false);
     }
   };
 
-  // Convert the Markdown response to HTML
-  const getFormattedResponse = (response) => {
-    return marked(response);
-  };
-
   return (
-    <div className="home-body">
-      <div>
+    <div className="home-container">
+      <div className="left-section">
         <h1 className="head">Resume Checker</h1>
-      </div>
-      <div>
-        <h3>Upload your resume and get instant feedback on your chances of getting hired!</h3>
-      </div>
-      <div>
+        <h3 className="subhead">
+          Upload your resume and get instant feedback on your chances of getting hired!
+        </h3>
         <input
           type="file"
           id="fileInput"
@@ -68,25 +78,34 @@ export default function Home() {
         <div className="input-box">
           <p>Drop your resume here or choose a file.</p>
           <label htmlFor="fileInput" className="custom-file-label">
-            Upload Resume Here..
+            Upload Resume Here
           </label>
-          {fileName && <p>Selected File: {fileName}</p>}
+          {fileName && <p className="selected-file">Selected File: {fileName}</p>}
+        </div>
+        <div className="response">
+          {isLoading && (
+            <div className="loader">
+              <div className="spinner"></div>
+            </div>
+          )}
+          {error && <p className="error">{error}</p>}
+          {response && (
+            <div
+              className="success"
+              dangerouslySetInnerHTML={{ __html: marked(response) }}
+            />
+          )}
         </div>
       </div>
-      <div className="response">
-        {isLoading && (
-          <div className="loader">
-            <div className="spinner"></div>
-          </div>
-        )} {/* Display loader animation */}
-        {error && <p className="error">{error}</p>}
-        {response && (
-          <div
-            className="success"
-            dangerouslySetInnerHTML={{ __html: getFormattedResponse(response) }}
-          />
-        )}
+      <div className="right-section">
+        <h3>Resume Evaluation Criteria</h3>
+        <ul>
+          {criteria.map((criterion, index) => (
+            <li key={index}>{criterion}</li>
+          ))}
+        </ul>
       </div>
     </div>
   );
 }
+ 
