@@ -1,5 +1,6 @@
 body {
     margin: 0;
+    padding: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f5f7fa;
     color: #333;
@@ -159,7 +160,70 @@ body {
     font-size: 18px;
   }
   
+  .input-box-2{
+    display: flex;
+    font-size:medium;
+    gap:10px;
+    flex-direction:row;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .checkbox1{
+    width: 15px;
+    height: 15px;
+    align-self: center;
+    margin-left: 15px;
+  }
+
+  .boxer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 25px;
+  }
+
+  .text-input-1{
+    width:40%;
+    height:25px;
+    margin-top: 30px;
+    outline: none;
+    border: 3px  #000000 solid;
+    border-radius: 24px;
+    padding: 10px;
+    font-size: medium;
+    transition: all ease-in-out 0.5s;
+  }
+
+  .text-input-1:hover{
+    border: 3px #095928 solid;
+  }
+  .text-input-1:focus{
+    width: 80%;
+  }
+
+  .button-1{
+    width: 100px;
+    height: 40px;
+    border-radius: 20px;
+    background-color:#0077ff;
+    color: #f5f7fa;
+    border: none;
+    font-size: medium;
+  }
+
+  .button-1:hover{
+    background-color:#5182ba;
+  }
+
+
+
+
   @media (max-width: 768px) {
+    .text-input-1{
+      width:60%;
+    }
     .home-container {
       flex-direction: column;
       gap: 20px;
@@ -170,4 +234,6 @@ body {
       width: 100%;
     }
   }
+
+
   
