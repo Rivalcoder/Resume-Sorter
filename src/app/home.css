@@ -97,6 +97,9 @@ body {
     margin-left: auto;
     margin-right: auto;
   }
+  .success{
+    background-color: #ffffff;
+  }
   
   .loader {
     display: flex;
