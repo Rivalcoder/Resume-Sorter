@@ -99,6 +99,7 @@ body {
   }
   .success{
     background-color: #ffffff;
+    color: #000000;
   }
   
   .loader {
