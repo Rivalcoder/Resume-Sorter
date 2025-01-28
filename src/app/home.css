@@ -20,6 +20,7 @@ body {
   
   .left-section {
     flex: 2;
+    width: 100%;
     background: #ffffff;
     padding: 30px;
     border-radius: 12px;
@@ -77,9 +78,7 @@ body {
     font-style: italic;
   }
   
-  .response {
-    margin-top: 30px;
-  }
+
   
   .error {
     color:#ffffff;
@@ -88,19 +87,23 @@ body {
     margin-top: 15px;
   }
   
+  
+
+
   .response {
-    margin-top: 30px;
+    margin-top: 50px;
     padding: 20px;
-    border-radius: 12px;
+    border-radius: 20px;
     font-size: 16px;
     line-height: 1.6;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     animation: fadeIn 0.5s ease-in-out;
     background-color: #ffffff;
-    max-width: 100%;
-    margin-left: auto;
-    margin-right: auto;
+    max-width:100%;
+    box-sizing: border-box; /* Ensure padding doesn't affect width */
+    overflow-wrap: break-word; /* Prevent long words from overflowing */
   }
+  
   .success{
     background-color: #ffffff;
     color: #000000;
@@ -239,6 +242,9 @@ body {
     .right-section,
     .left-section {
       width: 100%;
+    }
+    .response{
+      max-width:90%;
     }
   }
 

@@ -12,7 +12,7 @@ export default function Home() {
   const [check, setCheck] = useState(false);
   const [file1, setFile1] = useState(null);
   const [file2, setFile2] = useState(null);
-  const [text, setText] = useState("");
+  const [text, setText] = useState("Not Specified");
 
   const criteria = [
     "ATS Parse Rate: Assess how well the resume adheres to ATS standards.",
@@ -58,10 +58,7 @@ export default function Home() {
   };
 
   async function handleSubmit() {
-    if (!text) {
-      alert("Please Specify The Job Role To Validate Resume");
-      return;
-    }
+    
   
     const formData = new FormData();
     formData.append("resume", file1);
