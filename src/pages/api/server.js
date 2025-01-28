@@ -140,6 +140,9 @@ You are an expert AI resume analyst. Your task is to evaluate resumes strictly, 
 
 ---
 
+If the document provided is not a resume (e.g., includes "cover letter," "references," etc.), respond with:  
+🛑 **This program is designed for resumes related to job roles. Please provide a valid resume for evaluation.**  
+
 ### Process Overview:  
 
 #### User Input:  
@@ -181,8 +184,7 @@ If company requirements are provided, compare the extracted information from the
 
 1. **JobRole:** {jobRole}  
 
-If the document provided is not a resume (e.g., includes "cover letter," "references," etc.), respond with:  
-🛑 **This program is designed for resumes related to job roles. Please provide a valid resume for evaluation.**  
+
 
 ---
 
