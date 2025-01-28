@@ -5,11 +5,12 @@ import fs from "fs";
 import path from "path";
 import dotenv from "dotenv";
 
+
 dotenv.config({ path: ".env" });
 
 export const config = {
   api: {
-    bodyParser: false, //Because It Only Validate message String Not Files So Turned off 
+    bodyParser: false, 
   },
 };
 
@@ -45,19 +46,19 @@ export default async function handler(req, res) {
         const apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY;
 
         const fileData = fs.readFileSync(filePath);
-        const fileData2=undefined;
+        var fileData2=fs.readFileSync(path.join(process.cwd(), "public/blank-req.pdf"))
         if(requirementPath)
-          {const fileData2=fs.readFileSync(requirementPath);}
-      
-        
+          {var fileData2=fs.readFileSync(requirementPath);}
 
-        const prompt = `
+
+        const prompt =
+         `
             'If the document is not a resume:
 
     Reply: "This program is designed for resumes related to job roles. Please ensure the document is a resume for proper evaluation." End with a concise statement like: "This program evaluates resumes specifically. Please upload a resume related to a job role."
   Use Emojis and Tags like Header bold in the Resposonse And Start Response With Hello Applicant Name
     Resume Validation for Job Role: ${jobRole}
-    Validate based on the resume data itself. If the first document is the resume, proceed to the next steps. If the second document is found, consider it as requirements for the job.
+    Validate based on the resume data itself and for the Job Role. If the first document is the resume, proceed to the next steps. If the second document is found, consider it as requirements for the job.
     give Criteria Recommation in Detail And Give Hard Score
     If the document is a resume or job-related document:
 
@@ -144,6 +145,11 @@ export default async function handler(req, res) {
                 mimeType: "application/pdf",
                 data: fileData,
               },
+              {
+                type: "file",
+                mimeType: "application/pdf",
+                data: fileData2,
+              },
               
             ],
           },
@@ -153,32 +159,43 @@ export default async function handler(req, res) {
 
 
         
-        if (fileData2) {
-          messages.push({
-            role: "user",
-            content: {
-              type: "file",
-              mimeType: "application/pdf",
-              data: fileData2,
-            },
-          });
-        }
-
-        const result = await generateText({
-          model: google("gemini-1.5-pro-latest"),
+      
+        const result = await streamText({
+          model: google("gemini-2.0-flash-exp"),
           apiKey: apiKey,
           system: "You are a highly skilled professional Resume Sort sortlister specializing in resume build advice. Only respond to queries related to Resume topics, and ignore anything unrelated.",
           messages,
           
         });
 
-        res.status(200).json({ message: result.text });
+        if (!result.textStream) {
+          console.error("No text stream received from streamText.");
+          return res.status(500).json({ error: "No response stream." });
+        }
+
+        res.setHeader('Content-Type', 'text/plain');
+        res.setHeader('Transfer-Encoding', 'chunked');
+
+        const textStream = result.textStream;
+
+        for await (const textPart of textStream) {
+          console.log(textPart)
+          res.write(textPart);
+        }
+        res.end(); 
+
       } catch (error) {
         console.error("Error in text generation:", error);
         res.status(500).json({ error: "Failed to process file." });
       } finally {
-        if (filePath) {
+        
+        if (filePath && fs.existsSync(filePath)) {
           fs.unlinkSync(filePath);
+          console.log(`Deleted file: ${filePath}`);
+        }
+        if (requirementPath && fs.existsSync(requirementPath)) {
+          fs.unlinkSync(requirementPath);
+          console.log(`Deleted file: ${requirementPath}`);
         }
       }
     });

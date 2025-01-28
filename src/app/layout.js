@@ -1,9 +1,12 @@
 
+import Home from "./page";
+import StreamedData from "./test";
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        {children}
+        <Home />
       </body>
     </html>
   );

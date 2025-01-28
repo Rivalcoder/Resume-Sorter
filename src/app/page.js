@@ -9,10 +9,10 @@ export default function Home() {
   const [response, setResponse] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [check,setcheck]=useState(false);
-  const [file1,setfile1]=useState(null);
-  const [file2,setfile2]=useState(null);
-  const [text,settext]=useState("");
+  const [check, setCheck] = useState(false);
+  const [file1, setFile1] = useState(null);
+  const [file2, setFile2] = useState(null);
+  const [text, setText] = useState("");
 
   const criteria = [
     "ATS Parse Rate: Assess how well the resume adheres to ATS standards.",
@@ -30,9 +30,8 @@ export default function Home() {
     "Buzzwords & Clichés: Identify overused buzzwords or vague terms and suggest replacements.",
     "Design: Review the design for readability and ATS compatibility.",
   ];
-  
-  const handleFileChange = async (event) => {
 
+  const handleFileChange = async (event) => {
     const file = event.target.files[0];
     if (!file) {
       setFileName("");
@@ -42,7 +41,7 @@ export default function Home() {
     setFileName(file.name);
     setError("");
     setResponse("");
-    setfile1(file)
+    setFile1(file);
   };
 
   const handleFileChange2 = async (event) => {
@@ -55,63 +54,70 @@ export default function Home() {
     setFileName1(file.name);
     setError("");
     setResponse("");
-    setfile2(file)
+    setFile2(file);
   };
 
-
   async function handleSubmit() {
-
-    if(!text)
-    {
-      alert("Please Specify The Job Role To Validate Resume")
-      return
+    if (!text) {
+      alert("Please Specify The Job Role To Validate Resume");
+      return;
     }
-
+  
     const formData = new FormData();
     formData.append("resume", file1);
-    (file2 ? formData.append("requirement",file2):formData.append("requirement","Not Specified Here"))
-    formData.append("jobrole",text);
-    if(!formData)
-      {
-      alert("Im There ...")
-      console.log(formData)
-      }
-
+    if (file2) formData.append("requirement", file2);
+    else formData.append("requirement", "Not Specified Here");
+    formData.append("jobrole", text);
+  
     try {
-      
       setIsLoading(true);
       const res = await fetch("/api/server", {
         method: "POST",
         body: formData,
       });
-
+  
       if (!res.ok) {
         throw new Error("Failed to upload the file.");
       }
+  
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let done = false;
+      let result = '';
+  
+      while (!done) {
+        const { value, done: isDone } = await reader.read();
+        done = isDone;
+        result += decoder.decode(value, { stream: true });
+        
+        console.log('Received chunk:', result);
+        setIsLoading(false);
 
-      const data = await res.json();
-      setResponse(data.message);
-    } catch (err) {
+        setResponse(result);
+
+      }
+      
+      } catch (err) {
       console.error("Error:", err);
       setError("Failed to process your resume. Please try again.");
     } finally {
       setIsLoading(false);
     }
-
-  }
-
-  const change = async ()=>{
-      handleSubmit()
   }
   
-  function handle_request(){
-    setcheck(!check)
+
+  const change = async () => {
+    handleSubmit();
+  };
+
+  function handle_request() {
+    setCheck(!check);
   }
 
   return (
     <div className="home-container">
       <div className="left-section">
-        <h1 className="head">Resume Checker</h1>
+        <h1 className="head">Resume Analyser</h1>
         <h3 className="subhead">
           Upload your resume and get instant feedback on your chances of getting hired!
         </h3>
@@ -130,48 +136,60 @@ export default function Home() {
         </div>
         <div>
           <div className="input-box-2">
-          <input type="checkbox" value={check} onChange={handle_request} className="checkbox1" />
-          <p>If There Any Company Released Requirement File</p>
+            <input
+              type="checkbox"
+              value={check}
+              onChange={handle_request}
+              className="checkbox1"
+            />
+            <p>If There Any Company Released Requirement File</p>
           </div>
-          {check && 
-              <div className="input-box">
-                <input
+          {check && (
+            <div className="input-box">
+              <input
                 type="file"
                 id="fileInput1"
                 onChange={handleFileChange2}
                 style={{ display: "none" }}
-                />
-            <p>Drop Requirement here or choose a file.</p>
-            <label htmlFor="fileInput1" className="custom-file-label">
-              Upload Company Requirements Here
-            </label>
-            {fileName1 && <p className="selected-file">Selected File: {fileName1}</p>}
-          </div>
-          }
-        </div>
-        <div className="boxer">
-          <input type="text" placeholder="Specify The Job Roles You Are Applying..." className="text-input-1" onChange={(e)=>{settext(e.target.value)}}></input>
-          <button onClick={change} className="button-1">Submit</button>
-        </div>
-
-
-      { (isLoading || response )&&
-        <div className="response">
-          {isLoading && (
-            <div className="loader">
-              <div className="spinner"></div>
+              />
+              <p>Drop Requirement here or choose a file.</p>
+              <label htmlFor="fileInput1" className="custom-file-label">
+                Upload Company Requirements Here
+              </label>
+              {fileName1 && <p className="selected-file">Selected File: {fileName1}</p>}
             </div>
           )}
-          {error && <p className="error">{error}</p>}
-          {response && (
-            <div
-              className="success"
-              dangerouslySetInnerHTML={{ __html: marked(response) }}
-            />
-          )}
         </div>
-        
-      }
+        <div className="boxer">
+          <input
+            type="text"
+            placeholder="Specify The Job Roles You Are Applying..."
+            className="text-input-1"
+            onChange={(e) => {
+              setText(e.target.value);
+            }}
+          />
+          <button onClick={change} className="button-1">
+            Submit
+          </button>
+        </div>
+
+        {(isLoading || response) && (
+          <div className="response">
+            {isLoading && (
+              <div className="loader">
+                <div className="spinner"></div>
+              </div>
+            )}
+            {error && <p className="error">{error}</p>}
+            {response && (
+              <div
+                className="success"
+                dangerouslySetInnerHTML={{ __html: marked(response) }}
+              />
+            )}
+          </div>
+        )}
       </div>
       <div className="right-section">
         <h3>Resume Evaluation Criteria</h3>
@@ -184,4 +202,3 @@ export default function Home() {
     </div>
   );
 }
- 
