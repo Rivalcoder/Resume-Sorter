@@ -1,4 +1,4 @@
-# 📄 Resume Checker
+# 📄 Resume Sorter
 
 This project is a **Resume Checker** that allows users to upload their resumes and get instant feedback on their chances of getting hired. It uses Next.js for the frontend and backend, and integrates with the Google Generative AI API to analyze the resumes.
 
