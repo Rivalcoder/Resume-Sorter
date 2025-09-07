@@ -1,201 +1,194 @@
-"use client";
-import "./home.css";
-import { useState } from "react";
-import { marked } from "marked";
+import Link from "next/link";
+import FeatureRail from "./shared/FeatureRail";
 
 export default function Home() {
-  const [fileName, setFileName] = useState("");
-  const [fileName1, setFileName1] = useState("");
-  const [response, setResponse] = useState("");
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [check, setCheck] = useState(false);
-  const [file1, setFile1] = useState(null);
-  const [file2, setFile2] = useState(null);
-  const [text, setText] = useState("Not Specified");
-
-  const criteria = [
-    "ATS Parse Rate: Assess how well the resume adheres to ATS standards.",
-    "Quantifying Impact: Check if achievements are measurable with quantifiable results.",
-    "Repetition: Identify repeated phrases or overused terms.",
-    "Spelling & Grammar: Highlight any errors in spelling or grammar.",
-    "File Format & Size: Determine whether the resume is compatible with ATS systems.",
-    "Resume Length: Evaluate if the length is appropriate (e.g., 1-2 pages for most jobs).",
-    "Long Bullet Points: Check if bullet points are concise and action-oriented.",
-    "Contact Information: Verify the presence and accuracy of essential details (email, phone, LinkedIn).",
-    "Essential Sections: Confirm if standard sections like Skills, Experience, and Education are included.",
-    "Hard Skills: Evaluate the relevance of hard skills listed (e.g., technical proficiencies).",
-    "Soft Skills: Assess the clarity and relevance of soft skills included.",
-    "Active Voice: Check if bullet points use active voice instead of passive voice.",
-    "Buzzwords & Clichés: Identify overused buzzwords or vague terms and suggest replacements.",
-    "Design: Review the design for readability and ATS compatibility.",
-  ];
-
-  const handleFileChange = async (event) => {
-    const file = event.target.files[0];
-    if (!file) {
-      setFileName("");
-      setError("No file selected.");
-      return;
-    }
-    setFileName(file.name);
-    setError("");
-    setResponse("");
-    setFile1(file);
-  };
-
-  const handleFileChange2 = async (event) => {
-    const file = event.target.files[0];
-    if (!file) {
-      setFileName1("");
-      setError("No file selected.");
-      return;
-    }
-    setFileName1(file.name);
-    setError("");
-    setResponse("");
-    setFile2(file);
-  };
-
-  async function handleSubmit() {
-    
-  
-    const formData = new FormData();
-    formData.append("resume", file1);
-    if (file2) formData.append("requirement", file2);
-    else formData.append("requirement", "Not Specified Here");
-    formData.append("jobrole", text);
-  
-    try {
-      setIsLoading(true);
-      const res = await fetch("/api/server", {
-        method: "POST",
-        body: formData,
-      });
-  
-      if (!res.ok) {
-        throw new Error("Failed to upload the file.");
-      }
-  
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder();
-      let done = false;
-      let result = '';
-  
-      while (!done) {
-        const { value, done: isDone } = await reader.read();
-        done = isDone;
-        result += decoder.decode(value, { stream: true });
-        
-        console.log('Received chunk:', result);
-        setIsLoading(false);
-
-        setResponse(result);
-
-      }
-      
-      } catch (err) {
-      console.error("Error:", err);
-      setError("Failed to process your resume. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
-  }
-  
-
-  const change = async () => {
-    handleSubmit();
-  };
-
-  function handle_request() {
-    setCheck(!check);
-  }
-
   return (
-    <div className="home-container">
-      <div className="left-section">
-        <h1 className="head">Resume Analyser</h1>
-        <h3 className="subhead">
-          Upload your resume and get instant feedback on your chances of getting hired!
-        </h3>
-        <input
-          type="file"
-          id="fileInput"
-          onChange={handleFileChange}
-          style={{ display: "none" }}
-        />
-        <div className="input-box">
-          <p>Drop your resume here or choose a file.</p>
-          <label htmlFor="fileInput" className="custom-file-label">
-            Upload Resume Here
-          </label>
-          {fileName && <p className="selected-file">Selected File: {fileName}</p>}
-        </div>
-        <div>
-          <div className="input-box-2">
-            <input
-              type="checkbox"
-              value={check}
-              onChange={handle_request}
-              className="checkbox1"
-            />
-            <p>If There Any Company Released Requirement File</p>
+    <main className="container">
+      <section className="hero reveal">
+        <div className="bg-grid" />
+        <div className="blob one" />
+        <div className="blob two" />
+        <div className="hero-inner">
+          <h1 className="gradient-text">Supercharge Your Hiring With AI-Powered ATS</h1>
+          <p>Analyze resumes, shortlist at scale, and match candidates to roles with precision.</p>
+          <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+            <Link href="/analyze" className="btn">Analyze Resume</Link>
+            <Link href="/bulk" className="btn btn-outline">Bulk Shortlist</Link>
           </div>
-          {check && (
-            <div className="input-box">
-              <input
-                type="file"
-                id="fileInput1"
-                onChange={handleFileChange2}
-                style={{ display: "none" }}
-              />
-              <p>Drop Requirement here or choose a file.</p>
-              <label htmlFor="fileInput1" className="custom-file-label">
-                Upload Company Requirements Here
-              </label>
-              {fileName1 && <p className="selected-file">Selected File: {fileName1}</p>}
-            </div>
-          )}
         </div>
-        <div className="boxer">
-          <input
-            type="text"
-            placeholder="Specify The Job Roles You Are Applying..."
-            className="text-input-1"
-            onChange={(e) => {
-              setText(e.target.value);
-            }}
-          />
-          <button onClick={change} className="button-1">
-            Submit
-          </button>
+      </section>
+
+      <div className="marquee" style={{ marginTop: 16 }}>
+        <div className="marquee-track">
+          <span>ATS Scoring</span>
+          <span>Keyword Match</span>
+          <span>Bulk Shortlisting</span>
+          <span>JD Comparison</span>
+          <span>Hard Scores</span>
+          <span>Strict Analysis</span>
+          <span>Resume Tips</span>
+          <span>Fast Streaming</span>
+        </div>
+        <div className="marquee-track" aria-hidden>
+          <span>ATS Scoring</span>
+          <span>Keyword Match</span>
+          <span>Bulk Shortlisting</span>
+          <span>JD Comparison</span>
+          <span>Hard Scores</span>
+          <span>Strict Analysis</span>
+          <span>Resume Tips</span>
+          <span>Fast Streaming</span>
+        </div>
+      </div>
+
+      <div className="stats">
+        <div className="stat reveal delay-1"><h3>10x</h3><p>Faster shortlisting</p></div>
+        <div className="stat reveal delay-2"><h3>95%</h3><p>Keyword coverage</p></div>
+        <div className="stat reveal delay-3"><h3>100+</h3><p>Resumes per batch</p></div>
+      </div>
+
+      <section className="section reveal">
+        <div className="split">
+          <div>
+            <h2>Strict ATS Evaluation</h2>
+            <p className="lead">Hard scoring, keyword matching and detailed recommendations tailored to your role.</p>
+            <div className="stats">
+              <div className="stat"><h3>100+</h3><p>Signals analyzed</p></div>
+              <div className="stat"><h3>0-100</h3><p>Hard score output</p></div>
+              <div className="stat"><h3>Instant</h3><p>Streaming results</p></div>
+            </div>
+          </div>
+          <div className="feature-visual shine tilt">
+            <div className="heatmap"></div>
+          </div>
+        </div>
+      </section>
+
+      <section className="section reveal">
+        <div className="split reverse">
+          <div>
+            <h2>Bulk Shortlisting</h2>
+            <p className="lead">Upload many resumes, compare with JD, and get a ranked shortlist.</p>
+            <div className="timeline">
+              <div className="step"><h4>1. Upload</h4><p>Drop multiple PDFs and a requirement file.</p></div>
+              <div className="step"><h4>2. Analyze</h4><p>We score each resume strictly against the role.</p></div>
+              <div className="step"><h4>3. Review</h4><p>Get a ranked list with summaries and export options.</p></div>
+            </div>
+          </div>
+          <div className="feature-visual shine tilt">
+            <div className="ranklist">
+              <div className="rank-row"><div className="rank-name" style={{width:'70%'}}></div><div className="rank-score" style={{width:60}}></div></div>
+              <div className="rank-row"><div className="rank-name" style={{width:'56%'}}></div><div className="rank-score" style={{width:48}}></div></div>
+              <div className="rank-row"><div className="rank-name" style={{width:'62%'}}></div><div className="rank-score" style={{width:40}}></div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="section reveal">
+        <h2>What You Can Do</h2>
+        <p className="lead">Swipe through capabilities — optimized for speed and clarity.</p>
+        <div className="rail-wrap">
+          <FeatureRail>
+            <div className="panel">
+              <div className="sparkles" />
+              <div className="icon">🔎</div>
+              <span className="badge">Insights</span>
+              <h3>Keyword Gap</h3>
+              <p>Instantly find missing skills and terms vs JD.</p>
+              <div className="progress" style={{"--to":"82%"}}><span /></div>
+            </div>
+            <div className="panel">
+              <div className="sparkles" />
+              <div className="icon">🧩</div>
+              <span className="badge">Design</span>
+              <h3>Formatting Tips</h3>
+              <p>Actionable design guidance for ATS compatibility.</p>
+              <div className="progress" style={{"--to":"68%"}}><span /></div>
+            </div>
+            <div className="panel">
+              <div className="sparkles" />
+              <div className="icon">🏆</div>
+              <span className="badge">Scoring</span>
+              <h3>Experience Depth</h3>
+              <p>Strict scoring for relevance and achievements.</p>
+              <div className="progress" style={{"--to":"76%"}}><span /></div>
+            </div>
+            <div className="panel">
+              <div className="sparkles" />
+              <div className="icon">📤</div>
+              <span className="badge">Workflow</span>
+              <h3>Export Results</h3>
+              <p>CSV export and shareable links for teams.</p>
+              <div className="progress" style={{"--to":"90%"}}><span /></div>
+            </div>
+            <div className="panel">
+              <div className="sparkles" />
+              <div className="icon">📄</div>
+              <span className="badge">Speed</span>
+              <h3>Templates</h3>
+              <p>Role presets to speed up evaluation setup.</p>
+              <div className="progress" style={{"--to":"70%"}}><span /></div>
+            </div>
+          </FeatureRail>
+        </div>
+      </section>
+
+      <div className="features-list">
+        <div className="feature-row reveal delay-1">
+          <div className="chip">🧪</div>
+          <div className="feature-content">
+            <h3>Single Resume Analyzer</h3>
+            <p>Upload a resume with optional JD and get strict ATS scoring.</p>
+          </div>
+          <Link href="/analyze" className="feature-cta">Open Analyzer →</Link>
         </div>
 
-        {(isLoading || response) && (
-          <div className="response">
-            {isLoading && (
-              <div className="loader">
-                <div className="spinner"></div>
-              </div>
-            )}
-            {error && <p className="error">{error}</p>}
-            {response && (
-              <div
-                className="success"
-                dangerouslySetInnerHTML={{ __html: marked(response) }}
-              />
-            )}
+        <div className="feature-row reveal delay-2">
+          <div className="chip">📦</div>
+          <div className="feature-content">
+            <h3>Bulk Shortlisting</h3>
+            <p>Upload multiple resumes, add a requirement, and rank candidates.</p>
           </div>
-        )}
+          <Link href="/bulk" className="feature-cta">Start Bulk Upload →</Link>
+        </div>
+
+        <div className="feature-row reveal delay-3">
+          <div className="chip">🔎</div>
+          <div className="feature-content">
+            <h3>Keyword Gap & Suggestions</h3>
+            <p>Identify missing keywords vs role and get improvement tips.</p>
+        </div>
+          <Link href="/analyze" className="feature-cta">Run Check →</Link>
+          </div>
+
+        <div className="feature-row reveal delay-1">
+          <div className="chip">📄</div>
+          <div className="feature-content">
+            <h3>Role Templates</h3>
+            <p>Pick role presets to auto-fill requirements for fast analysis.</p>
+            </div>
+          <Link href="/analyze" className="feature-cta">Browse Templates →</Link>
+        </div>
+
+        <div className="feature-row reveal delay-2">
+          <div className="chip">📤</div>
+          <div className="feature-content">
+            <h3>Export & Share</h3>
+            <p>Export ranked results as CSV or share a link with recruiters.</p>
+              </div>
+          <Link href="/bulk" className="feature-cta">Export Options →</Link>
+          </div>
+
+        <div className="feature-row reveal delay-3">
+          <div className="chip">💡</div>
+          <div className="feature-content">
+            <h3>Tips & Best Practices</h3>
+            <p>Get curated guidance to improve resumes and job descriptions.</p>
       </div>
-      <div className="right-section">
-        <h3>Resume Evaluation Criteria</h3>
-        <ul>
-          {criteria.map((criterion, index) => (
-            <li key={index}>{criterion}</li>
-          ))}
-        </ul>
+          <Link href="/analyze" className="feature-cta">Read Tips →</Link>
       </div>
     </div>
+    </main>
   );
 }

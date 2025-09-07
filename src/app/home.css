@@ -3,11 +3,8 @@ body {
     margin: 0;
     padding: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f5f7fa;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #333;
+    background-color: var(--bg);
+    color: var(--text);
   }
   
   .home-container {
@@ -21,10 +18,10 @@ body {
   .left-section {
     flex: 2;
     width: 100%;
-    background: #ffffff;
+    background: var(--card);
     padding: 30px;
     border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px var(--border);
   }
   
   .head {
@@ -36,13 +33,13 @@ body {
   .subhead {
     font-size: 18px;
     margin-bottom: 25px;
-    color: #555;
+    color: var(--muted);
     line-height: 1.6;
   }
   
   .input-box {
-    background: #f9fbff;
-    border: 2px dashed #0077ff;
+    background: rgba(0,0,0,0.02);
+    border: 2px dashed var(--primary);
     padding: 25px;
     text-align: center;
     border-radius: 12px;
@@ -50,15 +47,15 @@ body {
   }
   
   .input-box:hover {
-    background-color: #eef6ff;
-    border-color: #0056b3;
+    background-color: rgba(0,0,0,0.04);
+    border-color: var(--primary);
   }
   
   .custom-file-label {
     display: inline-block;
     margin-top: 15px;
     padding: 12px 20px;
-    background-color: #0077ff;
+    background-color: var(--primary);
     color: #fff;
     border-radius: 6px;
     cursor: pointer;
@@ -68,7 +65,7 @@ body {
   }
   
   .custom-file-label:hover {
-    background-color: #0056b3;
+    background-color: #2b7fe0;
   }
 
   .selected-file {
@@ -96,17 +93,17 @@ body {
     border-radius: 20px;
     font-size: 16px;
     line-height: 1.6;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px var(--border);
     animation: fadeIn 0.5s ease-in-out;
-    background-color: #ffffff;
+    background-color: var(--card);
     max-width:100%;
     box-sizing: border-box; /* Ensure padding doesn't affect width */
     overflow-wrap: break-word; /* Prevent long words from overflowing */
   }
   
   .success{
-    background-color: #ffffff;
-    color: #000000;
+    background-color: var(--card);
+    color: var(--text);
   }
   
   .loader {
@@ -136,16 +133,16 @@ body {
   
   .right-section {
     flex: 1;
-    background: #ffffff;
+    background: var(--card);
     padding: 25px;
     border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px var(--border);
     max-height: fit-content;
   }
   
   .right-section h3 {
     font-size: 22px;
-    color: #0077ff;
+    color: var(--primary);
     margin-bottom: 20px;
     text-align: center;
   }
@@ -158,7 +155,7 @@ body {
   .right-section li {
     margin-bottom: 12px;
     font-size: 15px;
-    color: #555;
+    color: var(--muted);
     line-height: 1.6;
     display: flex;
     align-items: center;
@@ -200,7 +197,7 @@ body {
     height:25px;
     margin-top: 30px;
     outline: none;
-    border: 3px  #000000 solid;
+    border: 3px  var(--text) solid;
     border-radius: 24px;
     padding: 10px;
     font-size: medium;
@@ -218,14 +215,18 @@ body {
     width: 100px;
     height: 40px;
     border-radius: 20px;
-    background-color:#0077ff;
-    color: #f5f7fa;
+    background-color:var(--primary);
+    color: #fff;
     border: none;
     font-size: medium;
+    box-shadow: 0 6px 18px rgba(0, 119, 255, 0.25);
+    transition: transform 150ms ease, box-shadow 150ms ease;
   }
 
   .button-1:hover{
-    background-color:#5182ba;
+    background-color:#2b7fe0;
+    transform: translateY(-1px);
+    box-shadow: 0 10px 24px rgba(0, 119, 255, 0.3);
   }
 
 
